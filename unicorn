@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>獨角獸療癒卡牌抽卡</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #ffccff, #ccffff);
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            height: 100vh; /* Full height */
+            width: 100vw; /* Full width */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Prevents scrollbars from appearing */
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            width: 80%; /* Adjust as needed */
+            height: 80%; /* Adjust as needed */
+            box-sizing: border-box; /* Ensure padding and border are included in total size */
+            position: relative;
+        }
+        button {
+            background-color: #ff69b4;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 15px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        button:hover {
+            background-color: #ff1493;
+            transform: scale(1.1);
+        }
+        #card-container {
+            margin: 20px 0;
+            font-size: 24px;
+            color: #333;
+            opacity: 0;
+            transition: opacity 7s; /* Gradual appearance effect */
+        }
+        #card-image {
+            display: none;
+            width: 500mm;
+            height: 500mm;
+            margin-top: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0;
+            transition: opacity 7s; /* Gradual appearance effect */
+        }
+        #countdown {
+            font-size: 28px;
+            color: #ff69b4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>獨角獸療癒卡牌抽卡</h1>
+        <div id="countdown"></div>
+        <div id="card-container">請在7秒內，在心裡默唸妳想問的問題</div>
+        <img id="card-image" src="" alt="Card Image">
+        <button onclick="drawCard()">抽卡</button>
+    </div>
+    <script>
+        const cards = [
+            { text: '你的個人獨角獸<br>沐浴在純靜的愛之中，保持開放，迎接獨角獸魔法。', image: 'E:/unicorn/image/1.jpg' },
+            { text: '純淨的意圖<br>找到清明，放棄你的小我。', image: 'E:/unicorn/image/2.jpg' },
+            { text: '創造你的願景<br>做會讓你的心歌唱之事，你被輕推著向前行。', image: 'E:/unicorn/image/3.jpg' },
+            { text: '解放關係的羈絆<br>現在就是放下，寬恕就是自由。', image: 'E:/unicorn/image/4.jpg' },
+            { text: '新的契機<br>清理你的人生，暼見一扇魔法之門。', image: 'E:/unicorn/image/5.jpg' },
+            { text: '進入魔法<br>活在現在，抓住當下。', image: 'E:/unicorn/image/6.jpg' },
+            { text: '聆聽你的心<br>喚醒心靈能力，調頻進入無限。', image: 'E:/unicorn/image/7.jpg' },
+            { text: '樂於接受豐盛<br>相信你值得，接受豐富與繁榮。', image: 'E:/unicorn/image/8.jpg' },
+            { text: '敝開你的心<br>愛自己，敢於脆弱易感。', image: 'E:/unicorn/image/9.jpg' },
+            { text: '取用你的天賦<br>探索你的寶箱，接納你的真實本性。', image: 'E:/unicorn/image/10.jpg' },
+            { text: '尋找徴兆<br>好好注意，期待答案。', image: 'E:/unicorn/image/11.jpg' },
+            { text: '真理的自由<br>誠實地溝通，做真正的自己。', image: 'E:/unicorn/image/12.jpg' },
+            { text: '創意性的解決方案<br>打破常規思考，從更高的視角看待事物。', image: 'E:/unicorn/image/13.jpg' },
+            { text: '靠自己的力量站穩<br>對你的願景滿懷熱情，帶來正向的改變。', image: 'E:/unicorn/image/14.jpg' },
+            { text: '宇宙彩虹<br>尋找那罐金子，接受喜悅。', image: 'E:/unicorn/image/15.jpg' },
+            { text: '靈魂療癒<br>與你的本質連成一氣，看見你的真實色彩。', image: 'E:/unicorn/image/16.jpg' },
+            { text: '順流而行<br>放鬆並信任，接受正在發生的事。', image: 'E:/unicorn/image/17.jpg' },
+            { text: '令人煥然一新的綠洲<br>滋養你自己，累積力氣。', image: 'E:/unicorn/image/18.jpg' },
+            { text: '白光之繭<br>在完美的愛中休息，了解「一」。', image: 'E:/unicorn/image/19.jpg' },
+            { text: '玫瑰金宇宙池 <br>沐浴在宇宙的愛之中，好好吸叫智慧。', image: 'E:/unicorn/image/20.jpg' },
+            { text: '魔法水晶洞穴 <br>開啟你的內在之光，展現你的天賦。', image: 'E:/unicorn/image/21.jpg' },
+            { text: '顯化你的夢想 <br>聚焦在你的願景，尋求滿意和知足感。', image: 'E:/unicorn/image/22.jpg' },
+            { text: '靈魂的滿足 <br>向你的獨一無二致敬，做讓你感覺美好的事。', image: 'E:/unicorn/image/23.jpg' },
+            { text: '大量的祝福 <br>敝開自己，好好接收，將他傳出去。', image: 'E:/unicorn/image/24.jpg' },
+            { text: '充滿關愛的社群 <br> 參與且成為其中的一分子，豐富你的人生。', image: 'E:/unicorn/image/25.jpg' },
+            { text: '紫色火焰 <br>祈請宇宙鑽石紫色火焰，轉變不是愛的一切。', image: 'E:/unicorn/image/26.jpg' },
+            { text: '揚昇火焰 <br>與光融合，點燃密鑰與密碼。', image: 'E:/unicorn/image/27.jpg' },
+            { text: '基督之光池 <br>敝開你的心，散播無條件的愛。', image: 'E:/unicorn/image/28.jpg' },
+            { text: '聖雄能量 <br>建立你的光體，使你的揚昇加速。', image: 'E:/unicorn/image/29.jpg' },
+            { text: '宇宙鑽石 <br>散播希望和喜悅，照亮世界。', image: 'E:/unicorn/image/30.jpg' },
+            { text: '宇宙祖母綠 <br>創造完美的健康，取用神性豐盛。', image: 'E:/unicorn/image/31.jpg' },
+            { text: '宇宙紅寶石 <br>成為和平大使，實踐宇宙級的精通。', image: 'E:/unicorn/image/32.jpg' },
+            { text: '宇宙藍寶石 <br>以榮譽和誠信行動，說出你的真理。', image: 'E:/unicorn/image/33.jpg' },
+            { text: '宇宙珍珠 <br>擴展你的心靈天賦，打開通往天使界的大門。', image: 'E:/unicorn/image/34.jpg' },
+            { text: '神性潛能 <br>屐行你的天命，成為你所能成為的一切。', image: 'E:/unicorn/image/35.jpg' },
+            { text: '成為指路明燈 <br>啟發他人，為他人照亮道路。', image: 'E:/unicorn/image/36.jpg' },
+            { text: '靈性戰士 <br>向他人展現你是個睿智的領袖，指揮宇宙。', image: 'E:/unicorn/image/37.jpg' },
+            { text: '獨角獸能量之門 <br>集中你的光，仔細聆聽訊息。', image: 'E:/unicorn/image/38.jpg' },
+            { text: '揚昇電梯 <br>為快速的靈性成長做好準備，準備好迎接種種機會。', image: 'E:/unicorn/image/39.jpg' },
+            { text: '天玲座星際之門 <br>擴展你的業力輪，進入獨角獸王國。', image: 'E:/unicorn/image/40.jpg' },
+            { text: '恩典法則 <br>成為你的神性本質，在恩典中消融一切。', image: 'E:/unicorn/image/41.jpg' },
+            { text: '合而為「一」 <br>尋找共同的人性，祈請列本里亞之光。', image: 'E:/unicorn/image/42.jpg' },
+            { text: '覺醒 <br>從更高的視角觀看，看見每一個人內在的神性。', image: 'E:/unicorn/image/43.jpg' },
+            { text: '我是臨在 <br>擴展你的星系門戶，如我所是。', image: 'E:/unicorn/image/44.jpg' },
+            ];
+
+        function drawCard() {
+            const cardContainer = document.getElementById('card-container');
+            const cardImage = document.getElementById('card-image');
+            const countdown = document.getElementById('countdown');
+            let countdownTime = 7;
+
+            cardContainer.textContent = '請在7秒內，在心裡默唸妳想問的問題';
+            cardContainer.style.opacity = '0';
+            cardImage.style.display = 'none';
+            countdown.textContent = countdownTime;
+
+            const interval = setInterval(() => {
+                countdownTime--;
+
+                if (countdownTime <= 0) {
+                    clearInterval(interval);
+                    countdown.textContent = '';
+
+                    const cardIndex = Math.floor(Math.random() * cards.length);
+                    cardContainer.textContent = cards[cardIndex].text;
+                    cardContainer.style.opacity = '1';
+
+                    if (cards[cardIndex].image) {
+                        cardImage.src = cards[cardIndex].image;
+                        cardImage.style.display = 'block';
+                        cardImage.style.opacity = '1';
+                    } else {
+                        cardImage.style.display = 'none';
+                    }
+                } else {
+                    countdown.textContent = countdownTime;
+                }
+            }, 1000); // Countdown interval 1 second
+        }
+    </script>
+</body>
+</html>
