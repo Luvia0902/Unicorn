@@ -17,8 +17,6 @@ line_bot_api = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(config.LINE_CHANNEL_SECRET)
 
 logging.warning(openai.api_key)
-logging.warning(line_bot_api)
-logging.warning(handler)
 
 @app.route("/", methods=["GET"])
 def home():
@@ -60,4 +58,3 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))  # 預設 5000
     app.run(host="0.0.0.0", port=port)
     
-    logging.warning(port)
