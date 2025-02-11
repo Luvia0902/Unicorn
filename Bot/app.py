@@ -16,9 +16,9 @@ openai.api_key = config.OPENAI_API_KEY
 line_bot_api = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(config.LINE_CHANNEL_SECRET)
 
-logging.info(openai.api_key)
-logging.info(line_bot_api)
-logging.info(handler)
+logging.warning(openai.api_key)
+logging.warning(line_bot_api)
+logging.warning(handler)
 
 @app.route("/", methods=["GET"])
 def home():
@@ -55,8 +55,9 @@ def handle_message(event):
         event.reply_token,
         TextSendMessage(text=reply_text)
     )
-
-port = int(os.environ.get("PORT", 5000))  # 預設 5000
-app.run(host="0.0.0.0", port=port)
-
-logging.info(port)
+    
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))  # 預設 5000
+    app.run(host="0.0.0.0", port=port)
+    
+    logging.warning(port)
