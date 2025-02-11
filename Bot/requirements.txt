@@ -1,6 +1,6 @@
 Flask==2.2.3
 line-bot-sdk==2.4.3
 openai==0.28.0
-requests==2.26.0
+requests==2.31.0
 gunicorn==20.1.0
 python-dotenv==1.0.0
