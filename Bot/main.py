@@ -15,6 +15,10 @@ openai.api_key = config.OPENAI_API_KEY
 line_bot_api = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(config.LINE_CHANNEL_SECRET)
 
+console.log(openai.api_key);
+console.log(line_bot_api);
+console.log(handler);
+
 @app.route("/", methods=["GET"])
 def home():
     return "LINE Bot is running."
@@ -54,4 +58,4 @@ def handle_message(event):
 port = int(os.environ.get("PORT", 5000))  # 預設 5000
 app.run(host="0.0.0.0", port=port)
 
-
+console.log(port);
