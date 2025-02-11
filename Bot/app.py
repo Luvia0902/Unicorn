@@ -5,7 +5,7 @@ from linebot.models import MessageEvent, TextMessage, TextSendMessage
 import openai
 import config
 import os
-import logging
+
 
 app = Flask(__name__)
 
@@ -16,7 +16,6 @@ openai.api_key = config.OPENAI_API_KEY
 line_bot_api = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(config.LINE_CHANNEL_SECRET)
 
-logging.warning(openai.api_key)
 
 @app.route("/", methods=["GET"])
 def home():
