@@ -64,6 +64,6 @@ def handle_message(event):
 if __name__ == '__main__':
     print("==> get in port")
     port = int(os.environ.get("PORT", 8080))  # ✅ Railway 預設 8080
-    app.run(host="0.0.0.0", port=port)
-
+    # app.run(host="0.0.0.0", port=port)
+    app.run(host="0.0.0.0", port=port, debug=True)  # ✅ Flask 直接啟動，開啟 debug
 
