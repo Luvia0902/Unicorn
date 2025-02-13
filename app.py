@@ -1,5 +1,4 @@
 import openai
-import config
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -8,28 +7,30 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 
-
-
+    
 app = Flask(__name__)
 
 # 設定 OpenAI API Key
-openai.api_key = config.OPENAI_API_KEY
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # 設定 LINE BOT API
-line_bot_api = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)
-handler = WebhookHandler(config.LINE_CHANNEL_SECRET)
+line_bot_api = LineBotApi(os.getenv("LINE_CHANNEL_ACCESS_TOKEN"))
+handler = WebhookHandler(os.getenv("LINE_CHANNEL_SECRET"))
 
+@app.route('/')
+def home():
+    return "Hello, this is the webhook server!", 200  # ✅ 新增首頁路由，確保 Flask 正常運作
 
 @app.route("/", methods=["GET"])
 def home():
-    return "LINE Bot is running."
+    return "LINE Bot is running.", 200
 
 # LINE Webhook 端點
 @app.route("/webhook", methods=["POST"])
 def webhook():
+    data = request.json
     signature = request.headers["X-Line-Signature"]
     body = request.get_data(as_text=True)
-    data = request.json
     print("Received webhook data:", data)
 
     try:
@@ -59,5 +60,7 @@ def handle_message(event):
     )
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))  # 取得 Railway 指定的 PORT
+    port = int(os.environ.get("PORT", 8080))  # ✅ Railway 預設 8080
     app.run(host="0.0.0.0", port=port)
+
+
