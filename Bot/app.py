@@ -1,12 +1,13 @@
+import openai
+import config
+import os
 from dotenv import load_dotenv
 load_dotenv()
 from flask import Flask, request, jsonify
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
-import openai
-import config
-import os
+
 
 
 app = Flask(__name__)
@@ -28,13 +29,15 @@ def home():
 def webhook():
     signature = request.headers["X-Line-Signature"]
     body = request.get_data(as_text=True)
+    data = request.json
+    print("Received webhook data:", data)
 
     try:
         handler.handle(body, signature)
     except InvalidSignatureError:
-        return "Invalid signature", 400
+        return jsonify({"Invalid signature"}), 400
 
-    return "OK"
+    return jsonify({"message": "Webhook received"}), 200
 
 # 文字訊息處理
 @handler.add(MessageEvent, message=TextMessage)
@@ -54,8 +57,7 @@ def handle_message(event):
         event.reply_token,
         TextSendMessage(text=reply_text)
     )
-    
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))  # Railway 預設會提供 PORT
+
+if __name__ == '__main__':
+    port = int(os.environ.get("PORT", 5000))  # 取得 Railway 指定的 PORT
     app.run(host="0.0.0.0", port=port)
-    
