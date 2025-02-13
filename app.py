@@ -21,9 +21,9 @@ handler = WebhookHandler(os.getenv("LINE_CHANNEL_SECRET"))
 def home():
     return "Hello, this is the webhook server!", 200  # ✅ 新增首頁路由，確保 Flask 正常運作
 
-@app.route("/", methods=["GET"])
-def home():
-    return "LINE Bot is running.", 200
+#@app.route("/", methods=["GET"])
+#def home():
+#    return "LINE Bot is running.", 200
 
 # LINE Webhook 端點
 @app.route("/webhook", methods=["POST"])
