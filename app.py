@@ -1,3 +1,4 @@
+'''
 import openai
 import os
 from dotenv import load_dotenv
@@ -17,6 +18,7 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 line_bot_api = LineBotApi(os.getenv("LINE_CHANNEL_ACCESS_TOKEN"))
 handler = WebhookHandler(os.getenv("LINE_CHANNEL_SECRET"))
 
+
 @app.route('/')
 def home():
     print("==> home")
@@ -27,7 +29,7 @@ def home():
 #    return "LINE Bot is running.", 200
 
 # LINE Webhook 端點
-'''
+
 @app.route("/webhook", methods=["POST"])
 def webhook():
     data = request.json
@@ -60,10 +62,32 @@ def handle_message(event):
         event.reply_token,
         TextSendMessage(text=reply_text)
     )
-'''
+
 if __name__ == '__main__':
     print("==> get in port")
     port = int(os.environ.get("PORT", 8080))  # ✅ Railway 預設 8080
     # app.run(host="0.0.0.0", port=port)
     app.run(host="0.0.0.0", port=port, debug=True)  # ✅ Flask 直接啟動，開啟 debug
+'''
 
+import os
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Hello, this is the webhook server!", 200
+
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    data = request.json
+    if not data:
+        return jsonify({"error": "No JSON received"}), 400
+    print("Received webhook data:", data)
+    return jsonify({"message": "Webhook received"}), 200
+
+if __name__ == '__main__':
+    port = int(os.environ.get("PORT", 8080))  # ✅ Railway 預設 PORT=8080
+    print(f"🚀 Running on port {port}")  # ✅ 確保在 Logs 中能看到這個輸出
+    app.run(host="0.0.0.0", port=port, debug=True)
