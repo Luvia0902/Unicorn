@@ -90,4 +90,4 @@ def webhook():
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 8080))  # ✅ Railway 預設 PORT=8080
     print(f"🚀 Running on port {port}")  # ✅ 確保在 Logs 中能看到這個輸出
-    app.run(host="10.250.11.195", port=port, debug=True)
+    app.run(host="0.0.0.0", port=port, debug=True)
