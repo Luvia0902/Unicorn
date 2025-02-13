@@ -19,6 +19,7 @@ handler = WebhookHandler(os.getenv("LINE_CHANNEL_SECRET"))
 
 @app.route('/')
 def home():
+    print("==> home")
     return "Hello, this is the webhook server!", 200  # ✅ 新增首頁路由，確保 Flask 正常運作
 
 #@app.route("/", methods=["GET"])
@@ -26,6 +27,7 @@ def home():
 #    return "LINE Bot is running.", 200
 
 # LINE Webhook 端點
+'''
 @app.route("/webhook", methods=["POST"])
 def webhook():
     data = request.json
@@ -58,8 +60,9 @@ def handle_message(event):
         event.reply_token,
         TextSendMessage(text=reply_text)
     )
-
+'''
 if __name__ == '__main__':
+    print("==> get in port")
     port = int(os.environ.get("PORT", 8080))  # ✅ Railway 預設 8080
     app.run(host="0.0.0.0", port=port)
 
